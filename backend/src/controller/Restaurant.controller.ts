@@ -8,7 +8,7 @@ export class RestaurantController {
     async getAllRestaurant(req: Request, res: Response) {
         try {
             const db_result = await db.query("SELECT * FROM restaurants;")
-            console.log(db_result);
+            console.log(db_result.rows);
             
             res.status(200).json({
                 status: "success",

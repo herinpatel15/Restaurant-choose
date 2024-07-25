@@ -59,11 +59,23 @@
   }
 }
 
+
 @layer base {
   * {
     @apply border-border;
+    color: aliceblue;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    input {
+      color: black;
+    }
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }

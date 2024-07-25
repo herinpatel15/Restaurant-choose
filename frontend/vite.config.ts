@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     port: 3030,
     proxy: {
-      '/api/v1/restaurants/': {
+      '/api/v1/restaurants': {
         target: 'http://localhost:8080',
       }
     }

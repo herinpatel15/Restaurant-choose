@@ -1,7 +1,17 @@
+import { Route, Routes } from "react-router-dom"
+import Hero from "./pages/Hero"
+import Detail from "./pages/Detail"
+import Update from "./pages/Update"
+import { RestuarantsContextProvider } from "./provider/restuarantProvider"
+
 function App() {
   return (
     <>
-      <h1 className="text-red-700 text-3xl">Hello herin</h1>
+      <Routes>
+        <Route path="/" element={<Hero />}/>
+        <Route path="/restaurants/:id" element={<Detail />}/>
+        <Route path="/restaurants/:id/update" element={<Update />}/>
+      </Routes>
     </>
   )
 }
