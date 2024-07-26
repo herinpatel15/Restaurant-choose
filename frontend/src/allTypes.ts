@@ -7,17 +7,17 @@ export interface Restaurant {
     price_range: number
 }
 
-export interface RestaurantsContextType {
-    restuarants: Restaurant[] | [];
-    setRestuarants: Dispatch<SetStateAction<Restaurant[] | []>> 
-}
-
-export interface RestaurantsContextProviderProps {
+export interface RestaurantsProviderType {
     children: ReactNode
 }
 
-export interface AddRestaurantDataType {
+export interface createRestaurantsObjType {
     name: string,
     location: string,
     price_range: number
+}
+
+export interface RestaurantsContextType {
+    restaurants: Restaurant[] | [];
+    setRestaurants: Dispatch<SetStateAction<Restaurant[] | []>>;
 }

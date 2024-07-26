@@ -1,22 +1,22 @@
-import { Restaurant, RestaurantsContextProviderProps, RestaurantsContextType } from "@/allTypes";
+
+import { Restaurant, RestaurantsContextType, RestaurantsProviderType } from "@/allTypes";
 import { createContext, useContext, useState } from "react";
 
-const RestuarantsContext = createContext<RestaurantsContextType | null>(null)
 
-export const useRestaurants = () => {
-    const context = useContext(RestuarantsContext);
-    if (context === null) {
-        throw new Error("useRestaurants must be used within a RestaurantsContextProvider");
-    }
-    return context;
-};
+const RestaurantContext = createContext<RestaurantsContextType | null>(null)
 
-export const RestuarantsContextProvider = ({ children }: RestaurantsContextProviderProps) => {
-    const [restuarants, setRestuarants] = useState<Restaurant[] | []>([])
+export const  useRestaurant = () => {
+    const context = useContext(RestaurantContext)
+    if (!context) throw new Error("useRestaurant must be used within a RestaurantProvider")
+    return context
+}
+
+export const RestaurantProvider = ({children}: RestaurantsProviderType) => {
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([])
 
     return (
-        <RestuarantsContext.Provider value={{ restuarants, setRestuarants }}>
+        <RestaurantContext.Provider value={{restaurants, setRestaurants}}>
             {children}
-        </RestuarantsContext.Provider>
+        </RestaurantContext.Provider>
     )
 }

@@ -1,46 +1,53 @@
-// import { RestaurantsContextType } from "@/allTypes";
-import { AddRestaurantDataType } from "@/allTypes";
-import { addRestaurantAPI, getRestaurants } from "@/apis/RestaurantsFinderAPI";
+import { createRestaurantsObjType } from "@/allTypes";
+import { createRestaurant, getAllRestaurants } from "@/apis/allApis";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useRestaurants } from "@/provider/restuarantProvider";
+import { useRestaurant } from "@/provider/restuarantProvider";
 import { DeleteIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Hero() {
 
-    const [addRestayrant, setAddRestaurant] = useState({
-        name: '',
-        location: '',
-        price_range: 0,
-    })
-
-    const { restuarants, setRestuarants } = useRestaurants()
-
-    const handalAdd = async (data: AddRestaurantDataType) => {
-        await addRestaurantAPI(data)
-
-        // const upRest = await getRestaurants()
-        // // setRestuarants(upRest)
+    const [name, setName] = useState("")
+    const [location, setLocation] = useState("")
+    const [price_range, setPrice_range] = useState(0)
+    const objData = {
+        name,
+        location,
+        price_range
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setRestuarants(await getRestaurants())
+    const {restaurants, setRestaurants} = useRestaurant()
+
+    const allDataFetch = useCallback(async () => {
+        const fetchdata = await getAllRestaurants()
+        setRestaurants(fetchdata.data)
+    }, [getAllRestaurants, setRestaurants])
+
+    const handleAdd = useCallback(async () => {
+        // console.log("ok");
+        const fetchdata = await createRestaurant(objData)
+        console.log(fetchdata);
+        
+        if (fetchdata.status) {
+            alert("Restaurant Added Successfully")
+            allDataFetch()
         }
-        fetchData()
-    }, [])
-    
+    }, [createRestaurant, allDataFetch])
+
+    useEffect(() => {
+        allDataFetch()
+    }, [allDataFetch])
 
     return (
         <main className="max-h-screen min-h-screen flex items-center justify-center flex-col bg-gray-950 gap-10 p-10">
             <h1 className="text-3xl">Restuarants Finder</h1>
             <div className="flex gap-5">
-                <Input placeholder="Name" onChange={e => setAddRestaurant({...addRestayrant, name: e.target.value})} />
-                <Input placeholder="Location" onChange={e => setAddRestaurant({...addRestayrant, location: e.target.value})}/>
-                <Input type="number" placeholder="Price Range" onChange={e => setAddRestaurant({...addRestayrant, price_range: parseInt(e.target.value)})}/>
-                <Button onClick={() => handalAdd(addRestayrant)}>Add</Button>
+                <Input placeholder="Name" onChange={e => setName(e.target.value)} />
+                <Input placeholder="Location" onChange={e => setLocation(e.target.value)}/>
+                <Input type="number" placeholder="Price Range" onChange={e => setPrice_range(parseInt(e.target.value))}/>
+                <Button onClick={handleAdd}>Add</Button>
             </div>
 
             <Table>
@@ -56,8 +63,8 @@ export default function Hero() {
                 </TableHeader>
                 <TableBody className="bg-slate-900 text-white">
                     {
-                        Array.isArray(restuarants) && restuarants.length > 0 ?
-                            restuarants.map((restaurant) => (
+                        Array.isArray(restaurants) && restaurants.length > 0 ?
+                            restaurants.map((restaurant) => (
                                 <TableRow key={restaurant.id}>
                                     <TableCell>{restaurant.name}</TableCell>
                                     <TableCell>{restaurant.location}</TableCell>
