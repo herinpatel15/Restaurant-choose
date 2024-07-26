@@ -1,22 +1,26 @@
-import { createRestaurantsObjType } from "@/allTypes";
-import { createRestaurant, getAllRestaurants } from "@/apis/allApis";
+import { Restaurant } from "@/allTypes";
+import { createRestaurant, deleteRestaurant, getAllRestaurants } from "@/apis/allApis";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRestaurant } from "@/provider/restuarantProvider";
 import { DeleteIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
 
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
     const [price_range, setPrice_range] = useState(0)
+
     const objData = {
         name,
         location,
         price_range
     }
+
+    const navigate = useNavigate()
 
     const {restaurants, setRestaurants} = useRestaurant()
 
@@ -35,6 +39,20 @@ export default function Hero() {
             allDataFetch()
         }
     }, [createRestaurant, allDataFetch])
+
+    const handaleDelete = useCallback(async (id: number, resName: string) => {
+        console.log(id);
+        alert(`Are you sure delete "${resName}"`)
+        const fetchdata = await deleteRestaurant(id)
+        if (fetchdata.status) {
+            allDataFetch()
+        }
+    }, [deleteRestaurant, allDataFetch])
+
+    // const handaleUpdate = useCallback(async (id: number) => {
+    //     console.log(id);
+    //     navigate(`/restaurants/${id}/update`)
+    // }, [])
 
     useEffect(() => {
         allDataFetch()
@@ -73,9 +91,9 @@ export default function Hero() {
                                             "$".repeat(restaurant.price_range)
                                         }
                                     </TableCell>
-                                    <TableCell><Button>Update</Button></TableCell>
+                                    <TableCell><Button onClick={() => handaleUpdate(restaurant.id)}>Update</Button></TableCell>
                                     <TableCell>
-                                        <Button size="icon">
+                                        <Button size="icon" onClick={() => handaleDelete(restaurant.id, restaurant.name)}>
                                             <DeleteIcon color="red" className="h-4 w-4" />
                                         </Button>
                                     </TableCell>

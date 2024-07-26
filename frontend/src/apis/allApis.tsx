@@ -38,3 +38,19 @@ export const createRestaurant = async (data: createRestaurantsObjType) => {
         }
     }
 }
+
+export const deleteRestaurant = async (id: number) => {
+    try {
+        await baseurl.delete(`/${id}`)
+        return {
+            data: "success",
+            status: true
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            data: "error",
+            status: false
+        }
+    }
+}
