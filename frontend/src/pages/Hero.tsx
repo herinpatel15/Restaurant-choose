@@ -12,17 +12,17 @@ export default function Hero() {
 
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
-    const [price_range, setPrice_range] = useState(0)
+    const [priceRange, setPriceRange] = useState("")
 
-    const objData = {
-        name,
-        location,
-        price_range
-    }
+    // const objData = {
+    //     name,
+    //     location,
+    //     price_range
+    // }
 
     const navigate = useNavigate()
 
-    const {restaurants, setRestaurants} = useRestaurant()
+    const { restaurants, setRestaurants } = useRestaurant()
 
     const allDataFetch = useCallback(async () => {
         const fetchdata = await getAllRestaurants()
@@ -30,15 +30,35 @@ export default function Hero() {
     }, [getAllRestaurants, setRestaurants])
 
     const handleAdd = useCallback(async () => {
-        // console.log("ok");
-        const fetchdata = await createRestaurant(objData)
-        console.log(fetchdata);
-        
-        if (fetchdata.status) {
-            alert("Restaurant Added Successfully")
-            allDataFetch()
+        // console.log(objData);
+        if (name !== "" && location !== "" && priceRange !== "") {
+            const price_range = parseInt(priceRange)
+
+            const fetchdata = await createRestaurant({ name, location, price_range })
+            console.log(fetchdata);
+
+            if (fetchdata.status) {
+                alert("Restaurant Added Successfully")
+                allDataFetch()
+                setName("")
+                setLocation("")
+                setPriceRange("")
+            }
+        } else {
+            alert("Please Fill All Fields")
         }
-    }, [createRestaurant, allDataFetch])
+    },
+        [
+            createRestaurant,
+            allDataFetch,
+            setName,
+            setLocation,
+            setPriceRange,
+            name,
+            location,
+            priceRange
+        ]
+    )
 
     const handaleDelete = useCallback(async (id: number, resName: string) => {
         console.log(id);
@@ -49,10 +69,11 @@ export default function Hero() {
         }
     }, [deleteRestaurant, allDataFetch])
 
-    // const handaleUpdate = useCallback(async (id: number) => {
-    //     console.log(id);
-    //     navigate(`/restaurants/${id}/update`)
-    // }, [])
+    const handaleUpdate = useCallback(async (id: number) => {
+        console.log(id)
+        if (!id) alert("id is not fiend")
+        navigate(`/restaurants/${id}/update`)
+    }, [navigate])
 
     useEffect(() => {
         allDataFetch()
@@ -62,9 +83,9 @@ export default function Hero() {
         <main className="max-h-screen min-h-screen flex items-center justify-center flex-col bg-gray-950 gap-10 p-10">
             <h1 className="text-3xl">Restuarants Finder</h1>
             <div className="flex gap-5">
-                <Input placeholder="Name" onChange={e => setName(e.target.value)} />
-                <Input placeholder="Location" onChange={e => setLocation(e.target.value)}/>
-                <Input type="number" placeholder="Price Range" onChange={e => setPrice_range(parseInt(e.target.value))}/>
+                <Input placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
+                <Input placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} />
+                <Input type="number" value={priceRange} placeholder="Price Range" onChange={e => setPriceRange(e.target.value)} />
                 <Button onClick={handleAdd}>Add</Button>
             </div>
 

@@ -2,7 +2,7 @@ import { createRestaurantsObjType } from "@/allTypes";
 import axios from "axios";
 
 const baseurl = axios.create({
-    baseURL: "api/v1/restaurants",
+    baseURL: "/api/v1/restaurants",
 })
 
 export const getAllRestaurants = async () => {
@@ -20,6 +20,42 @@ export const getAllRestaurants = async () => {
         }
     }
 } 
+
+export const getOneRestaurant = async (id: string) => {
+    try {
+        // console.log(baseurl);
+        
+        const res = await baseurl.get(`/${id}`)
+        // console.log(res.data.data);
+        
+        return {
+            data: res.data.data,
+            status: true,
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            data: "error",
+            status: false
+        }
+    }
+}
+
+export const editRestaurant = async (id: string, data: createRestaurantsObjType) => {
+    try {
+        await baseurl.put(`/${id}`, data)
+        return {
+            data: "success",
+            status: true
+        }
+    } catch(err) {
+        console.log(err)
+        return {
+            data: "error",
+            status: false
+        }
+    }
+}
 
 export const createRestaurant = async (data: createRestaurantsObjType) => {
     try {

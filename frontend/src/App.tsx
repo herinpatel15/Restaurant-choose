@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom"
 import Hero from "./pages/Hero"
 import Detail from "./pages/Detail"
 import Update from "./pages/Update"
-import { RestuarantsContextProvider } from "./provider/restuarantProvider"
 
 function App() {
   return (

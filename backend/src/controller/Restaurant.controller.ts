@@ -28,7 +28,7 @@ export class RestaurantController {
     async getOneRestaurant(req: Request, res: Response) {
         try {
             const db_result = await db.query(`SELECT * FROM restaurants WHERE id = $1;`, [req.params.id])
-            console.log(db_result);
+            console.log(db_result.rows);
             
             res.status(200).json({
                 status: "success",
