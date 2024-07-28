@@ -1,19 +1,17 @@
 import { useParams } from "react-router-dom"
-import {Rating, Star} from "@/components/ui/Rating"
+import {Rating} from "@/components/ui/Rating"
+import { useState } from "react"
 
 export default function Detail() {
 
     const id = useParams().id
 
+    const [rat, setRat] = useState(0)
+
     return (
         <main className="bg-black h-screen flex flex-col items-center justify-center">
-            <Rating className="text-6xl text-blue-600">
-                <Star />
-                <Star />
-                <Star />
-                <Star />
-                <Star />
-            </Rating>
+            <Rating />
+            <h1>{rat}</h1>
         </main>
     )
 }
