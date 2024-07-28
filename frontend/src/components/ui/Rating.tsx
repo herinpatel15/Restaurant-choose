@@ -6,6 +6,7 @@ interface RatingProps {
     color?: string,
     value?: number,
     starClass?: string,
+    readonly?: boolean,
     onRatingChange?: (value: number) => void
 }
 
@@ -18,6 +19,8 @@ const Rating = React.forwardRef<
 
     const [rating, setRating] = useState(props.value || 0)
     const [hover, setHover] = useState(0)
+
+    const read = props.readonly || false
 
     const handaleRatingChange = (newRating: number) => {
         setRating(newRating)
@@ -40,9 +43,9 @@ const Rating = React.forwardRef<
                             key={index}
                             color={`${props.color || "#FFD900"}`}
                             filled={ratingValue <= (hover || rating)}
-                            onClick={() => handaleRatingChange(ratingValue)}
-                            onMouseEnter={() => setHover(ratingValue)}
-                            onMouseLeave={() => setHover(0)}
+                            onClick={() => {if (!read) handaleRatingChange(ratingValue)}}
+                            onMouseEnter={() => {if (!read) setHover(ratingValue)}}
+                            onMouseLeave={() => {if (!read) setHover(0)}}
                             className={props.starClass}
                         />
                     )

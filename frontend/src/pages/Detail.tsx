@@ -10,7 +10,7 @@ export default function Detail() {
 
     return (
         <main className="bg-black h-screen flex flex-col items-center justify-center">
-            <Rating />
+            <Rating value={3} readonly={true} onRatingChange={(value) => setRat(value)} />
             <h1>{rat}</h1>
         </main>
     )
